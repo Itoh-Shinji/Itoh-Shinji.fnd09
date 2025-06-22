@@ -1,0 +1,16 @@
+.frame {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    width: 300px;
+    height: 300px;
+    border: 10px solid gray;
+}
+
+.panel{
+    background-color: lightblue;
+    width: 98px;
+    height: 98px;
+    /* padding: 10px; */
+    border: 2px solid black;
+}
