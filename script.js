@@ -33,9 +33,9 @@
         持ち点　1,000,000から1回クリックするたびにある比率で減らしていく。
         SCORE表示は整数化（切り上げ）したものを表示する。
         減らしていく割合
-        　1~20回:　0.8
-        　21~40回：　0.9
-        　41回以降：　0.95
+        　1~10回:　0.95
+        　11~30回：　0.99
+        　31回以降：　0.999
 ５．４．でどこかがクリックされたら、"Congratulations!!!""の表示と、
  "もう1回？"、"やめる？"の表示を行う。
     １）"Congratulations!!!""の表示はSCOREの下に表示させる
@@ -65,9 +65,9 @@ const colors = [
 ];
 
 const alpha =colors.length
-     + 0.02;//左数値が黒の出る確率。他色出現確率１に対する比率。
+     + 0.01;//左数値が黒の出る確率。他色出現確率１に対する比率。
 
-//３．２）の機能用↓
+//３．２）の機能用↓↓↓↓↓↓↓↓
 const contactJudgeTable = {
     "panel1": [2,4,5],
     "panel2": [1,3,4,5,6],
@@ -79,15 +79,32 @@ const contactJudgeTable = {
     "panel8": [4,5,6,7,9],
     "panel9": [5,6,8]
 }
-//３．２）の機能用↑
+//３．２）の機能用↑↑↑↑↑↑↑↑
+
+//４．３）の機能
+let scoreValue = 1000000;
+document.getElementById("score").innerText = scoreValue;
+let clickCount = 1;
 
 
+//２．の１）、２）の機能
 document.querySelectorAll(".panel").forEach(panel => {
     const initialRandomColorIndex =Math.floor(Math.random()*6);
     panel.style.backgroundColor = colors[initialRandomColorIndex];
     panel.addEventListener("click", function (){
         const randomColorIndex =Math.floor(Math.random()* alpha );
         this.style.backgroundColor = colors[randomColorIndex];
+        clickCount += 1;
+        if (clickCount <= 10){
+            scoreValue = Math.floor(scoreValue*(0.95 ** clickCount));    
+        } else if (clickCount <= 30){
+            scoreValue = Math.floor(scoreValue*(0.99 ** clickCount));    
+        } else if (scoreValue > 0){
+            scoreValue = Math.floor(scoreValue*(0.999 ** clickCount));
+        } else {
+            scoreValue = 5963;//頑張っても揃えられない方への救済措置「ご苦労さん」
+        }
+        document.getElementById("score").innerText = scoreValue;
 
 //３．２）の機能
         if (colors[randomColorIndex] === "black") {
