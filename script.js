@@ -14,7 +14,7 @@
 ３．黒になると爆発の効果と共に、影響を受けて隣接するパネルの色がランダムに変わる。
     １）爆発の効果は画面が揺れるイメージ。
     ２）影響を受けて隣接するパネルの色を変える処理は、
-    　　パネルの隣接判定を行い、対象のパネルをクリックする。
+    　　パネルの隣接判定を行い、対象のパネルの色をランダムに変える。
 ４．9枚のパネルの色が揃ったら、その色をテーマにした画像（女神）の表示
  （配置された9枚のサイズで1枚に置き換えるイメージ）、と
  　"Congratulations!!!""の表示とSCOREの表示を行う。
@@ -38,9 +38,10 @@
         　41回以降：　0.95
 ５．４．でどこかがクリックされたら、"Congratulations!!!""の表示と、
  "もう1回？"、"やめる？"の表示を行う。
-    １）もう1回？、　やめる？　の2つのボタンを画像の上に重ねて表示させる。
-    ２）もう1回？をクリックした場合は再度ゲームを実行する。
-    ３）やめるをクリックした場合は
+    １）"Congratulations!!!""の表示はSCOREの下に表示させる
+    ２）もう1回？、　やめる？　の2つのボタンを画像の上に重ねて表示させる。
+    ３）もう1回？をクリックした場合は再度ゲームを実行する。
+    ４）やめるをクリックした場合は
     　　表示した画像の下に
     　　　赤:　¡Buen día!
     　　　青:　Merci pour votre travail !
@@ -62,15 +63,43 @@ const colors = [
     "white",
     "black"
 ];
+
 const alpha =colors.length
-     + 0.2;//左数値が黒の出る確率。他色出現確率１に対する比率。
+     + 0.02;//左数値が黒の出る確率。他色出現確率１に対する比率。
+
+//３．２）の機能用↓
+const contactJudgeTable = {
+    "panel1": [2,4,5],
+    "panel2": [1,3,4,5,6],
+    "panel3": [2,5,6],
+    "panel4": [1,2,5,7,8],
+    "panel5": [1,2,3,4,6,7,8,9],
+    "panel6": [2,3,5,7,8],
+    "panel7": [4,5,8],
+    "panel8": [4,5,6,7,9],
+    "panel9": [5,6,8]
+}
+//３．２）の機能用↑
+
 
 document.querySelectorAll(".panel").forEach(panel => {
-    const initialRandomColorIndex =Math.floor(Math.random()* alpha );
+    const initialRandomColorIndex =Math.floor(Math.random()*6);
     panel.style.backgroundColor = colors[initialRandomColorIndex];
     panel.addEventListener("click", function (){
         const randomColorIndex =Math.floor(Math.random()* alpha );
         this.style.backgroundColor = colors[randomColorIndex];
+
+//３．２）の機能
+        if (colors[randomColorIndex] === "black") {
+            const panelId = parseInt(this.id);
+            const adjacentPanels = contactJudgeTable[`panel${panelId}`];//テンプレートリテラルはバッククォート
+            adjacentPanels.forEach(adjId => {
+                const adjacentPanel = document.getElementById(adjId);
+                const randomAdjacentColorIndex = Math.floor(Math.random()* 6);
+                adjacentPanel.style.backgroundColor = colors[randomAdjacentColorIndex];
+            });
+        }
     });
 });
+
 
