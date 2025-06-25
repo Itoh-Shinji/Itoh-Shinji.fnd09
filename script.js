@@ -64,8 +64,8 @@ const colors = [
     "black"
 ];
 
-const alpha =colors.length
-     + 0.01;//左数値が黒の出る確率。他色出現確率１に対する比率。
+const alpha =colors.length - 1
+    + 0.4  ;//左数値が黒の出る確率。他色出現確率１に対する比率。
 
 //３．２）の機能用↓↓↓↓↓↓↓↓
 const contactJudgeTable = {
@@ -78,13 +78,55 @@ const contactJudgeTable = {
     "panel7": [4,5,8],
     "panel8": [4,5,6,7,9],
     "panel9": [5,6,8]
-}
+};
 //３．２）の機能用↑↑↑↑↑↑↑↑
+
+//４．の機能
+let judgeArry = [];
 
 //４．３）の機能
 let scoreValue = 1000000;
 document.getElementById("score").innerText = scoreValue;
 let clickCount = 1;
+
+//５．４）の機能
+const endrollMessage = {
+    "red": "¡Buen día!" ,
+    "blue": "Merci pour votre travail !" ,
+    "yellow": "Obrigado pelo seu trabalho!" ,
+    "green": "Guid job!" ,
+    "orange": "Goed gedaan!" ,
+    "white": "おつかれさま。"
+};
+
+//５．の機能
+function createButtons(colorName){
+    const existingButtons = document.querySelectorAll(".stopButton , .restartButton");
+    existingButtons.forEach(button => button.remove());
+    const stopButton = document.createElement("button");
+    stopButton.classnName = "stopButton";
+    stopButton.innerText ="やめる？";
+    stopButton.addEventListener("click", function(){
+        document.getElementById("message-box").innerText = endrollMessage[colorName];
+    })
+    const restartButton = document.createElement("button");
+    restartButton.classnName = "restartButton";
+    restartButton.innerText = "もう1回？";
+    restartButton.addEventListener("click", function(){
+        document.querySelectorAll(".panel").forEach(panel => {
+            const initialRandomColorIndex = Math.floor(Math.random() *6);
+            panel.style.backgroundColor = colors[initialRandomColorIndex];
+        });xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+        scoreValue = 1000000;
+        clickCount = 1;
+        document.getElementById("score").innerText = scoreValue;
+        const existingButtons = document.querySelectorAll(".stopButtons" , "restartButton");
+        existingButtons.forEach(button => button.remove());
+    })
+    const frame = document.querySelectorAll(".frame");
+    frame.appendChild(stopButton);
+    frame,appendChild(restartButton);
+}
 
 
 //２．の１）、２）の機能
@@ -94,6 +136,23 @@ document.querySelectorAll(".panel").forEach(panel => {
     panel.addEventListener("click", function (){
         const randomColorIndex =Math.floor(Math.random()* alpha );
         this.style.backgroundColor = colors[randomColorIndex];
+
+//４．の機能
+        judgeArry = Array.from(document.querySelectorAll(".panel")).map( p => p.style.backgroundColor);
+        if (judgeArry.every( color => color === judgeArry[0])){
+            const matchingColor = judgeArry[0];
+            const colorName = colors.find(color => color === matchingColor);
+            const img = document.createElement("img");
+            img.src = `images/${colorName}.png`;
+            img.className = "overlay-image";
+            document.querySelector(".frame").appendChild(img);
+            document.getElementById("message-box").innerText = "Congraturations!!!";
+
+//５．の機能
+            createButtons(colorName);
+        }
+
+//４．３）の機能
         clickCount += 1;
         if (clickCount <= 10){
             scoreValue = Math.floor(scoreValue*(0.95 ** clickCount));    
@@ -118,5 +177,3 @@ document.querySelectorAll(".panel").forEach(panel => {
         }
     });
 });
-
-
