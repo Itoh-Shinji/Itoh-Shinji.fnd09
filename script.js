@@ -112,7 +112,10 @@ function createButtons(colorName){
     stopButton.innerText ="やめる？";
     stopButton.addEventListener("click", function(){
         document.getElementById("message-box").innerText = endrollMessage[colorName];
+        const existingButtons = document.querySelectorAll(".stopButton , .restartButton");
+        existingButtons.forEach(button => button.remove());
     })
+
     const restartButton = document.createElement("button");
     restartButton.className = "restartButton";
     restartButton.innerText = "もう１回？";
