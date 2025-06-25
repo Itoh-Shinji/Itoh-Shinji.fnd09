@@ -65,7 +65,7 @@ const colors = [
 ];
 
 const alpha =colors.length - 1
-    + 0.01  ;//左数値が黒の出る確率。他色出現確率１に対する比率。
+    + 0.3  ;//左数値が黒の出る確率。他色出現確率１に対する比率。
 
 //３．２）の機能用↓↓↓↓↓↓↓↓
 const contactJudgeTable = {
