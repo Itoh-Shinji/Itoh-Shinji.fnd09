@@ -65,7 +65,7 @@ const colors = [
 ];
 
 const alpha =colors.length - 1
-    + 0.4  ;//左数値が黒の出る確率。他色出現確率１に対する比率。
+    + 0.01  ;//左数値が黒の出る確率。他色出現確率１に対する比率。
 
 //３．２）の機能用↓↓↓↓↓↓↓↓
 const contactJudgeTable = {
@@ -103,29 +103,42 @@ const endrollMessage = {
 function createButtons(colorName){
     const existingButtons = document.querySelectorAll(".stopButton , .restartButton");
     existingButtons.forEach(button => button.remove());
+
+    const buttonContainer = document.createElement("div");
+    buttonContainer.className = "button-container";
+
     const stopButton = document.createElement("button");
-    stopButton.classnName = "stopButton";
+    stopButton.className = "stopButton";
     stopButton.innerText ="やめる？";
     stopButton.addEventListener("click", function(){
         document.getElementById("message-box").innerText = endrollMessage[colorName];
     })
     const restartButton = document.createElement("button");
-    restartButton.classnName = "restartButton";
-    restartButton.innerText = "もう1回？";
+    restartButton.className = "restartButton";
+    restartButton.innerText = "もう１回？";
     restartButton.addEventListener("click", function(){
         document.querySelectorAll(".panel").forEach(panel => {
             const initialRandomColorIndex = Math.floor(Math.random() *6);
             panel.style.backgroundColor = colors[initialRandomColorIndex];
-        });xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+        });
         scoreValue = 1000000;
         clickCount = 1;
         document.getElementById("score").innerText = scoreValue;
-        const existingButtons = document.querySelectorAll(".stopButtons" , "restartButton");
+
+        const existingButtons = document.querySelectorAll(".stopButton , .restartButton");
         existingButtons.forEach(button => button.remove());
+
+        const existingImg = document.querySelector(".overlay-image");
+        if (existingImg) {
+            existingImg.remove();
+        }
+        document.getElementById("message-box").innerText = "";
     })
-    const frame = document.querySelectorAll(".frame");
-    frame.appendChild(stopButton);
-    frame,appendChild(restartButton);
+    buttonContainer.appendChild(stopButton);
+    buttonContainer.appendChild(restartButton);
+
+    const frame = document.querySelector(".frame");
+    frame.appendChild(buttonContainer);
 }
 
 

@@ -41,4 +41,17 @@
     flex-direction: column;
 }
 
+.stopButton , .restartButton {
+    position: static;
+    bottom: 10px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    position: absolute;
+    bottom: 10px;
+}
 
